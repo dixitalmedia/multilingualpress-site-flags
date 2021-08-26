@@ -14,13 +14,13 @@
  * Description: Add flags to MultilingualPress plugin
  * Author: Inpsyde GmbH
  * Author URI: https://inpsyde.com
- * Version: 1.1.2
+ * Version: 1.1.3
  * Text Domain: multilingualpress-site-flags
  * Domain Path: /languages/
  * License: MIT
  * Network: true
- * Requires at least: 4.8
- * Requires PHP: 7.0
+ * Requires at least: 5.0
+ * Requires PHP: 7.2
  */
 
 namespace Inpsyde\MultilingualPress\Flags;
