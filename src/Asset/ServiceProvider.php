@@ -50,5 +50,13 @@ class ServiceProvider implements BootstrappableServiceProvider
                     'frontend.css'
                 )
             );
+
+        $container[AssetManager::class]
+            ->registerStyle(
+                $assetFactory->createInternalStyle(
+                    'multilingualpress-site-flags-back',
+                    'backend.css'
+                )
+            );
     }
 }

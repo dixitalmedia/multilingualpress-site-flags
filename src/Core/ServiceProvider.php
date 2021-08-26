@@ -192,6 +192,8 @@ final class ServiceProvider implements BootstrappableServiceProvider
             },
             20
         );
+
+        $container[AssetManager::class]->enqueueStyle('multilingualpress-site-flags-back');
     }
 
     /**
