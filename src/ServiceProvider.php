@@ -41,8 +41,8 @@ class ServiceProvider implements ModuleServiceProvider
                 [
                     'description' => $this->description(),
                     'name' => __('MultilingualPress Site Flags', 'multilingualpress'),
-                    'active' => true,
-                    'disabled' => true,
+                    'active' => false,
+                    'disabled' => false,
                 ]
             )
         );
