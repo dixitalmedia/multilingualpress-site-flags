@@ -58,22 +58,6 @@ class ServiceProvider implements ModuleServiceProvider
      */
     public function register(Container $container)
     {
-        $container->addService(
-            FlagFilter::class,
-            static function (Container $container): FlagFilter {
-                return new FlagFilter(
-                    $container[SiteSettingsRepository::class],
-                    $container[FlagFactory::class]
-                );
-            }
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function activateModule(Container $container)
-    {
         /**
          * Bootstraps MultilingualPress Language Flags.
          *
@@ -92,6 +76,22 @@ class ServiceProvider implements ModuleServiceProvider
             0
         );
 
+        $container->addService(
+            FlagFilter::class,
+            static function (Container $container): FlagFilter {
+                return new FlagFilter(
+                    $container[SiteSettingsRepository::class],
+                    $container[FlagFactory::class]
+                );
+            }
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function activateModule(Container $container)
+    {
         $flagFilter = $container[FlagFilter::class];
 
         add_filter('nav_menu_item_title', [$flagFilter, 'navMenuItems'], 10, 2);
