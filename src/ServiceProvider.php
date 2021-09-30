@@ -20,6 +20,7 @@ use Inpsyde\MultilingualPress\Framework\Service\Container;
 use Inpsyde\MultilingualPress\Flags\Flag\Factory as FlagFactory;
 use Inpsyde\MultilingualPress\Framework\Service\Exception\NameOverwriteNotAllowed;
 use Inpsyde\MultilingualPress\Framework\Service\Exception\WriteAccessOnLockedContainer;
+use Inpsyde\MultilingualPress\Framework\Service\ServiceProvidersCollection;
 use Inpsyde\MultilingualPress\TranslationUi\Post\TableList;
 
 class ServiceProvider implements ModuleServiceProvider
@@ -73,6 +74,24 @@ class ServiceProvider implements ModuleServiceProvider
      */
     public function activateModule(Container $container)
     {
+        /**
+         * Bootstraps MultilingualPress Language Flags.
+         *
+         * @return bool
+         *
+         * @wp-hook multilingualpress.add_service_providers
+         */
+        add_action(
+            'multilingualpress.add_service_providers',
+            static function (ServiceProvidersCollection $providers) {
+                $providers
+                    ->add(new Asset\ServiceProvider())
+                    ->add(new Core\ServiceProvider())
+                    ->add(new Flag\ServiceProvider());
+            },
+            0
+        );
+
         $flagFilter = $container[FlagFilter::class];
 
         add_filter('nav_menu_item_title', [$flagFilter, 'navMenuItems'], 10, 2);
