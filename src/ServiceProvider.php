@@ -1,4 +1,5 @@
-<?php # -*- coding: utf-8 -*-
+<?php
+
 /*
  * This file is part of the MultilingualPress Site Flag package.
  *
@@ -19,7 +20,8 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater as ParentSiteSettin
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler as ParentSiteSiteSettingsUpdateRequestHandler;
 use Inpsyde\MultilingualPress\Flags\Flag\Factory;
 use Inpsyde\MultilingualPress\Core\Locations;
-use Inpsyde\MultilingualPress\Flags\Core\Admin;
+use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteSettingsRepository;
+use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Framework\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Framework\Factory\NonceFactory;
 use Inpsyde\MultilingualPress\Framework\Http\ServerRequest;
@@ -54,7 +56,7 @@ class ServiceProvider implements ModuleServiceProvider
                 self::MODULE_ID,
                 [
                     'description' => $this->description(),
-                    'name' => __('MultilingualPress Site Flags', 'multilingualpress'),
+                    'name' => __('MultilingualPress Site Flags', 'multilingualpress-site-flags'),
                     'active' => false,
                     'disabled' => false,
                 ]
@@ -94,7 +96,7 @@ class ServiceProvider implements ModuleServiceProvider
             Factory::class,
             static function () use ($container): Factory {
                 return new Factory(
-                    $container[Admin\SiteSettingsRepository::class]
+                    $container[SiteSettingsRepository::class]
                 );
             }
         );
@@ -103,7 +105,7 @@ class ServiceProvider implements ModuleServiceProvider
             FlagFilter::class,
             static function (Container $container): FlagFilter {
                 return new FlagFilter(
-                    $container[Admin\SiteSettingsRepository::class],
+                    $container[SiteSettingsRepository::class],
                     $container[Factory::class]
                 );
             }
@@ -125,26 +127,26 @@ class ServiceProvider implements ModuleServiceProvider
         );
 
         $container->share(
-            Admin\SiteSettingsRepository::class,
-            static function (): Admin\SiteSettingsRepository {
-                return new Admin\SiteSettingsRepository();
+            SiteSettingsRepository::class,
+            static function (): SiteSettingsRepository {
+                return new SiteSettingsRepository();
             }
         );
 
         $container->addService(
-            Admin\SiteFlagUrlSetting::class,
+            SiteFlagUrlSetting::class,
             static function (Container $container): SiteFlagUrlSetting {
-                return new Admin\SiteFlagUrlSetting(
-                    $container[Admin\SiteSettingsRepository::class]
+                return new SiteFlagUrlSetting(
+                    $container[SiteSettingsRepository::class]
                 );
             }
         );
 
         $container->addService(
-            Admin\SiteMenuLanguageStyleSetting::class,
+            SiteMenuLanguageStyleSetting::class,
             static function (Container $container): SiteMenuLanguageStyleSetting {
-                return new Admin\SiteMenuLanguageStyleSetting(
-                    $container[Admin\SiteSettingsRepository::class]
+                return new SiteMenuLanguageStyleSetting(
+                    $container[SiteSettingsRepository::class]
                 );
             }
         );
@@ -155,8 +157,8 @@ class ServiceProvider implements ModuleServiceProvider
                 return new ParentSiteSettings(
                     SiteSettingMultiView::fromViewModels(
                         [
-                            $container[Admin\SiteFlagUrlSetting::class],
-                            $container[Admin\SiteMenuLanguageStyleSetting::class],
+                            $container[SiteFlagUrlSetting::class],
+                            $container[SiteMenuLanguageStyleSetting::class],
                         ]
                     ),
                     $container[AssetManager::class]
@@ -170,8 +172,8 @@ class ServiceProvider implements ModuleServiceProvider
                 return new ParentNewSiteSettings(
                     SiteSettingMultiView::fromViewModels(
                         [
-                            $container[Admin\SiteFlagUrlSetting::class],
-                            $container[Admin\SiteMenuLanguageStyleSetting::class],
+                            $container[SiteFlagUrlSetting::class],
+                            $container[SiteMenuLanguageStyleSetting::class],
                         ]
                     )
                 );
@@ -179,10 +181,10 @@ class ServiceProvider implements ModuleServiceProvider
         );
 
         $container->addService(
-            Admin\SiteSettingsUpdater::class,
-            static function (Container $container): Admin\SiteSettingsUpdater {
-                return new Admin\SiteSettingsUpdater(
-                    $container[Admin\SiteSettingsRepository::class],
+            SiteSettingsUpdater::class,
+            static function (Container $container): SiteSettingsUpdater {
+                return new SiteSettingsUpdater(
+                    $container[SiteSettingsRepository::class],
                     $container[ServerRequest::class]
                 );
             }
@@ -192,7 +194,7 @@ class ServiceProvider implements ModuleServiceProvider
             'FlagSiteSettingsUpdateHandler',
             static function (Container $container): ParentSiteSiteSettingsUpdateRequestHandler {
                 return new ParentSiteSiteSettingsUpdateRequestHandler(
-                    $container[Admin\SiteSettingsUpdater::class],
+                    $container[SiteSettingsUpdater::class],
                     $container[ServerRequest::class],
                     $container[NonceFactory::class]->create(['save_site_settings'])
                 );
@@ -298,18 +300,18 @@ class ServiceProvider implements ModuleServiceProvider
 
         add_action(
             ParentSiteSettingsUpdater::ACTION_DEFINE_INITIAL_SETTINGS,
-            [$container[Admin\SiteSettingsUpdater::class], 'defineInitialSettings']
+            [$container[SiteSettingsUpdater::class], 'defineInitialSettings']
         );
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    protected function description()
+    protected function description(): string
     {
         return __(
             'Enable Site Flags for MultilingualPress.',
-            'multilingualpress'
+            'multilingualpress-site-flags'
         );
     }
 }

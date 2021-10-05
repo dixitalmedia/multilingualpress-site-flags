@@ -1,4 +1,6 @@
-<?php # -*- coding: utf-8 -*-
+<?php
+
+# -*- coding: utf-8 -*-
 /*
  * This file is part of the MultilingualPress package.
  *
@@ -12,10 +14,11 @@ declare(strict_types=1);
 
 namespace Inpsyde\MultilingualPress\Flags\Flag;
 
-use function Inpsyde\MultilingualPress\languageByTag;
 use Inpsyde\MultilingualPress\Framework\Language\Language;
 use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteSettingsRepository;
+
 use function Inpsyde\MultilingualPress\siteLanguageTag;
+use function Inpsyde\MultilingualPress\languageByTag;
 
 /**
  * MultilingualPress Flag Factory
