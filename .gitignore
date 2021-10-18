@@ -27,10 +27,3 @@ report-*.txt
 tests/codeception/_output/*
 tests/codeception/_data/*
 tests/codeception/tests/*.suite.yml
-
-# Assets
-*.min.js.map
-*.min.css.map
-/**/public/**/*.js
-/**/public/**/*.css
-/**/public/**/*.map
