@@ -1,6 +1,11 @@
 # Composer
 /vendor/
 
+# NPM
+.npm
+node_modules/
+npm-debug.log*
+
 # CodeSniffer
 /phpcs.xml
 report-*.txt
