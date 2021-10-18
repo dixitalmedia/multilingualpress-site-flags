@@ -1,6 +1,15 @@
 <?php # -*- coding: utf-8 -*-
 
-use Leafo\ScssPhp;
+use \ScssPhp\ScssPhp;
+
+(static function () {
+    $autoloadPath = __DIR__ . '/vendor/autoload.php';
+
+    if (is_readable($autoloadPath)) {
+        /** @noinspection PhpIncludeInspection */
+        require_once $autoloadPath;
+    }
+})();
 
 /** @noinspection PhpUndefinedClassInspection */
 class RoboFile extends Robo\Tasks
@@ -109,11 +118,11 @@ class RoboFile extends Robo\Tasks
         if (!$success->wasSuccessful()) {
             return $success;
         }
-
         return $this->taskScss([
             $from . 'frontend.scss' => $to . 'frontend.min.css',
             $from . 'backend.scss' => $to . 'backend.min.css',
         ])
+            ->setFormatter(ScssPhp\Formatter\Compressed::class)
             ->compiler('scssphp')
             ->importDir($from)
             ->run();

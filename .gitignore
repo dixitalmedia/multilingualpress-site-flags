@@ -1,11 +1,6 @@
 # Composer
 /vendor/
 
-# NPM
-.npm
-node_modules/
-npm-debug.log*
-
 # CodeSniffer
 /phpcs.xml
 report-*.txt
@@ -27,3 +22,10 @@ report-*.txt
 tests/codeception/_output/*
 tests/codeception/_data/*
 tests/codeception/tests/*.suite.yml
+
+# Assets
+*.min.js.map
+*.min.css.map
+/**/public/**/*.js
+/**/public/**/*.css
+/**/public/**/*.map
