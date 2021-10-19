@@ -16,7 +16,6 @@ const pump = require('pump')
 const usage = require('gulp-help-doc')
 const {spawn} = require('child_process')
 const fetch = require('node-fetch')
-const wpPot = require('wp-pot')
 const replace = require('gulp-replace')
 const sass = require('gulp-sass')
 const rename = require('gulp-rename')
@@ -257,38 +256,6 @@ function _copy({baseDir, buildDir, distDir}) {
 			dest(buildDir),
 			done
 		)
-	}
-}
-
-/**
- * Make Pot File
- */
-function _makePot({baseDir, buildDir, langDir, l: local, textDomain}) {
-	/**
-	 * Generates a POT file for translation.
-	 *
-	 * This typically means scanning all production source files for i18n,
-	 * and using a POT generator to compile the internationalized strings into a file.
-	 */
-	return function makePot(done) {
-		const workDir = local ? baseDir : buildDir;
-
-		wpPot({
-			relativeTo: workDir,
-			metadataFile: `${workDir}/multilingualpress.php`,
-			destFile: `${workDir}/${langDir}/en_GB.pot`,
-			src: [
-				`${workDir}/src/**/*.php`,
-				`${workDir}/multilingualpress.php`,
-				`${workDir}/uninstall.php`,
-				`${workDir}/modules/**/*.php`,
-
-				// PHP parse error. Looks like it doesn't understand unpacking.
-				`!${workDir}/src/modules/WooCommerce/TranslationUi/Product/MetaboxFields.php`,
-			]
-		});
-
-		done();
 	}
 }
 
@@ -746,17 +713,6 @@ exports.processAssets = parallel(
 )
 
 /**
- * Generates a POT file.
- *
- * @task {makePot}
- * @args {local} Use this flag process in the working dir instead of build dir.
- * @args {langDir} Name of the directory to store language files. Default: 'languages'.
- */
-exports.makePot = series(
-	_makePot(options),
-)
-
-/**
  * Downloads translations from a Eurotext API.
  *
  * @task {downloadTranslations}
@@ -775,7 +731,6 @@ exports.downloadTranslations = series(
  * @args {translationsApiUrl} The URL of the corresponding translation project.
  */
 exports.processTranslations = series(
-	exports.makePot,
 	exports.downloadTranslations,
 )
 

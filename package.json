@@ -54,7 +54,6 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
     "gulp-unzip": "^1.1.0",
-    "gulp-wp-pot": "^2.3.5",
     "gulp-zip": "^4.2.0",
     "minimist": "^1.2.0",
     "mocha": "^6.2.0",
