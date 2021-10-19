@@ -65,5 +65,12 @@
     "tmp": "^0.2",
     "webpack": "^4.28.2",
     "webpack-cli": "^3.1.2"
+  },
+  "scripts": {
+    "build": "gulp processAssets -l",
+    "watch": "webpack --watch",
+    "test": "./node_modules/.bin/mocha --recursive ./tests/js/ --require @babel/register",
+    "unitTest": "./node_modules/.bin/mocha --recursive ./tests/js/unit/ --require @babel/register",
+    "functionalTest": "./node_modules/.bin/mocha --recursive ./tests/js/functional/ --require @babel/register"
   }
 }
