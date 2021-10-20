@@ -1,6 +1,6 @@
 {
     "name": "inpsyde/multilingualpress-site-flags",
-    "description": "Add flags feature to multilingualpress plugin.",
+    "description": "An external module to add additional functionality to MultilingualPress. The module will enable displaying flags in the language switcher, it can be activated from MultilingualPress settings",
     "type": "mlp-mod",
     "license": "MIT",
     "authors": [

@@ -250,7 +250,7 @@ class ServiceProvider implements ModuleServiceProvider
             ->registerStyle(
                 $assetFactory->createInternalStyle(
                     'multilingualpress-site-flags-back',
-                    'backend.css'
+                    'backend.min.css'
                 )
             );
 
@@ -275,7 +275,7 @@ class ServiceProvider implements ModuleServiceProvider
             ->registerStyle(
                 $assetFactory->createInternalStyle(
                     'multilingualpress-site-flags-front',
-                    'frontend.css'
+                    'frontend.min.css'
                 )
             );
         $container[AssetManager::class]->enqueueStyle('multilingualpress-site-flags-front');
