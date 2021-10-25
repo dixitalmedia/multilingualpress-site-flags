@@ -1,20 +1,16 @@
-/*
- * TODO Introduce check of js coding standards https://standardjs.com/index.html#install
- * TODO Introduce Encore to replace webpack
- */
-
 const process = require('process')
 const gulp = require('gulp')
 const {series, parallel, src, dest} = gulp
+const zip = require('gulp-zip')
+const del = require('del')
 const minimist = require('minimist')
-const fs = require('fs')
-const readline = require('readline')
 const pump = require('pump')
 const usage = require('gulp-help-doc')
 const {spawn} = require('child_process')
 const sass = require('gulp-sass')
 const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
+const date = require('date-and-time')
 
 const options = minimist(process.argv, {
 	string: [
@@ -23,9 +19,7 @@ const options = minimist(process.argv, {
 		'baseDir',
 		'buildDir',
 		'distDir',
-		'langDir',
 		'depsVersionPhp',
-		'licenseUrl',
 		'environment',
 		'local',
 	],
@@ -167,43 +161,6 @@ let chain = function (tasks, callback) {
 	})
 }
 
-let getFileLines = (function (options) {
-	/**
-	 * Retrieves file contents as lines asynchronously.
-	 *
-	 * @see https://nodejs.org/api/readline.html#readline_rl_symbol_asynciterator
-	 *
-	 * @param {String} filepath The path to the file, whose lines to retrieve. Relative to Gulpfile.
-	 *
-	 * @return {AsyncIterator<string>} The iterator of lines. Use with `for await .. of ..`
-	 */
-	return function (filepath) {
-		filepath = `${options.buildDir}/${filepath}`
-		let fileStream = fs.createReadStream(filepath)
-		let rl = readline.createInterface({
-			input: fileStream,
-			crlfDelay: Infinity,
-		})
-
-		return rl;
-	}
-})(options)
-
-let getFirstLine = (function (options) {
-	/**
-	 * Retrieves the fist line of a file at the specified path.
-	 *
-	 * @param {String} filepath The path to the file. Relative to Gulpfile.
-	 * @return {String} The line.
-	 */
-	return async function (filepath) {
-		for await (let line of getFileLines(filepath)) {
-			return line;
-		}
-	}
-})(options)
-
-
 // --------------------------------------------------------------------
 // TASKS
 // --------------------------------------------------------------------
@@ -211,6 +168,125 @@ let getFirstLine = (function (options) {
 function _help() {
 	return function help(done) {
 		return usage(gulp)
+	}
+}
+
+function _clean({baseDir, buildDir}) {
+	return function clean(done) {
+		del.sync([buildDir], {force: true, cwd: baseDir})
+		done()
+	}
+}
+
+function _copy({baseDir, buildDir, distDir}) {
+	return function copy(done) {
+		pump(
+			src([
+				// All files with all extensions
+				`**/*`,
+				`**/*.*`,
+
+				// Not these though
+				`!${buildDir}/**/*`,
+				`!${distDir}/**/*`,
+				'!.git/**/*',
+				'!vendor/**/*',
+				'!node_modules/**/*',
+				// Not these because they need to be generated
+				'!public/{css,css/**}',
+				// Although vendor is totally ignored above, without the next line a similar error is thrown:
+				// https://github.com/amphp/amp/issues/227
+				// Presumably, a problem with symlinks, but not sure why
+				'!vendor/amphp/**/asset',
+			], {base: baseDir, cwd: baseDir, dot: true}),
+			dest(buildDir),
+			done
+		)
+	}
+}
+
+function _archive({buildDir, distDir, packageVersion, packageName}) {
+	/**
+	 * Archive the build into a single file.
+	 *
+	 * This typically involves compressing the files of the build that are needed for production
+	 * into a single archive.
+	 *
+	 * The archive name will include the package name, version, shortened commit hash,
+	 * and a timestamp.
+	 */
+	return function archive(done) {
+		exec(
+			`git log -n 1 | head -n 1 | sed -e 's/^commit //' | head -c 8`,
+			[],
+			{'shell': true},
+			(error, stdout) => {
+				if (error) {
+					done(new Error(error));
+				}
+
+				let commit = stdout;
+				let timestamp = date.format(new Date(), 'YYYY-MM-DD.HH-mm-ss', true)
+				let archiveFileName = `${packageName}_${packageVersion}+${commit}.${timestamp}.zip`;
+
+				pump(
+					src([
+						'inc/**/*.*',
+						'languages/**/*.*',
+						'public/**/*.*',
+						'src/**/*.*',
+						'vendor/**/*.*',
+						'LICENSE',
+						'README.md',
+						'module.php',
+
+						// Cleanup
+						'!**/README',
+						'!**/readme',
+						'!**/readme.md',
+						'!**/readme.txt',
+						'!**/readme.txt',
+						'!**/DEVELOPERS',
+						'!**/developers',
+						'!**/DEVELOPERS.md',
+						'!**/developers.md',
+						'!**/DEVELOPERS.txt',
+						'!**/developers.txt',
+						'!**/composer.json',
+						'!**/composer.lock',
+						'!**/package.json',
+						'!**/package-lock.json',
+						'!**/yarn.lock',
+						'!**/phpunit.xml.dist',
+						'!**/webpack.config.js',
+						'!**/.github',
+						'!**/.git',
+						'!**/.gitignore',
+						'!**/.gitattributes',
+						'!**/Makefile',
+						'!**/bitbucket-pipelines.yml',
+						'!**/bin.yml',
+						'!**/test.yml',
+						'!**/tests.yml',
+						'!**/*.js.map',
+						'!**/*. css.map',
+					], {
+						base: buildDir,
+						cwd: buildDir,
+						dot: true,
+					}),
+					rename((path) => {
+						path.dirname = `${packageName}/${path.dirname}`
+					}),
+					zip(archiveFileName),
+					dest(distDir, {cwd: buildDir, base: buildDir}),
+					(...args) => {
+						log(`Archive created: ${archiveFileName}`);
+						done(...args)
+					},
+				)
+			}
+		)
 	}
 }
 
@@ -228,7 +304,6 @@ function _processCss({baseDir, buildDir, l: local}) {
 
 		pump(
 			src([
-				'src/modules/*/resources/scss/*.scss',
 				'resources/scss/*.scss',
 			], {
 				base: workDir,
@@ -276,6 +351,29 @@ exports.help = series(
 )
 
 /**
+ * Cleans the build directory.
+ *
+ * @task {clean}
+ * @arg {buildDir} The directory to use for building.
+ */
+exports.clean = series(
+	_clean(options),
+)
+
+/**
+ * Copies project files to build directory.
+ *
+ * Will skip Git files, as well as Composer and Node packages.
+ *
+ * @arg {buildDir} The directory to use for building.
+ *
+ * @task {copy}
+ */
+exports.copy = series(
+	_copy(options),
+)
+
+/**
  * Processes CSS files.
  *
  * @task {processCss}
@@ -297,9 +395,20 @@ exports.processAssets = parallel(
 )
 
 /**
+ * Archives all files necessary for package distribution.
+ *
+ * @task {archive}
+ * @arg {distDir} The directory to put the dist archive into.
+ */
+exports.archive = series(
+	_archive(options),
+)
+
+/**
  * Process the source and other files.
  *
  * @task {process}
+ * @arg {packageVersion} The version of the package.
  */
 exports.process = parallel(
 	exports.processAssets,
@@ -310,8 +419,11 @@ exports.process = parallel(
  *
  * @task {build}
  * @order {2}
+ * @arg {packageVersion} The version of the package.
  */
 exports.build = series(
+	exports.clean,
+	exports.copy,
 	exports.process,
 )
 
@@ -320,9 +432,11 @@ exports.build = series(
  *
  * @task {dist}
  * @order {1}
+ * @arg {packageVersion} The version of the package.
  */
 exports.dist = series(
 	exports.build,
+	exports.archive,
 )
 
 exports.default = series(
