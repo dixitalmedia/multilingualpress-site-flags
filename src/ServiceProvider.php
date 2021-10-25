@@ -82,12 +82,13 @@ class ServiceProvider implements ModuleServiceProvider
                 $path = dirname(__FILE__);
                 $pluginPath = rtrim(plugin_dir_path($path), '/');
                 $pluginUrl = rtrim(plugins_url('/', $path), '/');
+                $publicDirName = "public";
 
                 return [
                     'pluginPath' => $pluginPath,
                     'pluginUrl' => $pluginUrl,
-                    'assetsPath' => "{$pluginPath}/public",
-                    'assetsUrl' => "{$pluginUrl}/public",
+                    'assetsPath' => "{$pluginPath}/{$publicDirName}",
+                    'assetsUrl' => "{$pluginUrl}/{$publicDirName}",
                 ];
             }
         );

@@ -22,6 +22,7 @@ report-*.txt
 .phan/*
 !.phan/config.php
 /autoload.php
+*.DS_Store
 
 # Codeception
 tests/codeception/_output/*
