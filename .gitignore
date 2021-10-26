@@ -35,3 +35,6 @@ tests/codeception/tests/*.suite.yml
 /**/public/**/*.js
 /**/public/**/*.css
 /**/public/**/*.map
+
+# Build
+/build/
