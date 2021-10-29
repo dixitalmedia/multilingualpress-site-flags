@@ -58,7 +58,7 @@ class ServiceProvider implements ModuleServiceProvider
                     'description' => $this->description(),
                     'name' => __('MultilingualPress Site Flags', 'multilingualpress-site-flags'),
                     'active' => false,
-                    'disabled' => false,
+                    'disabled' => !$this->isSiteFlagsAddonActive(),
                 ]
             )
         );
@@ -314,5 +314,13 @@ class ServiceProvider implements ModuleServiceProvider
             'Enable Site Flags for MultilingualPress.',
             'multilingualpress-site-flags'
         );
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isSiteFlagsAddonActive(): bool
+    {
+        return is_plugin_active('multilingual-site-flags/multilingual-site-flags.php');
     }
 }
