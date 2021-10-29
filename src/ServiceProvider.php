@@ -41,6 +41,7 @@ use Inpsyde\MultilingualPress\TranslationUi\Post\TableList;
 class ServiceProvider implements ModuleServiceProvider
 {
     protected const MODULE_ID = 'multilingualpress-site-flags';
+    protected const OLD_FLAGS_ADDON_PATH = 'multilingualpress-site-flags/multilingualpress-site-flags.php';
 
     /**
      * Registers the module at the module manager.
@@ -51,14 +52,24 @@ class ServiceProvider implements ModuleServiceProvider
      */
     public function registerModule(ModuleManager $moduleManager): bool
     {
+        $disabledDescription = '';
+
+        if ($this->isSiteFlagsAddonActive()) {
+            $disabledDescription = __(
+                'The module can be activated only if the old MultilingualPress Site Flags Addon is disabled',
+                'multilingualpress-site-flags'
+            );
+            $moduleManager->unregisterById(self::MODULE_ID);
+        }
+
         return $moduleManager->register(
             new Module(
                 self::MODULE_ID,
                 [
-                    'description' => $this->description(),
+                    'description' => "{$this->description()} {$disabledDescription}",
                     'name' => __('MultilingualPress Site Flags', 'multilingualpress-site-flags'),
                     'active' => false,
-                    'disabled' => !$this->isSiteFlagsAddonActive(),
+                    'disabled' => $this->isSiteFlagsAddonActive(),
                 ]
             )
         );
@@ -321,6 +332,6 @@ class ServiceProvider implements ModuleServiceProvider
      */
     protected function isSiteFlagsAddonActive(): bool
     {
-        return is_plugin_active('multilingual-site-flags/multilingual-site-flags.php');
+        return is_plugin_active(self::OLD_FLAGS_ADDON_PATH);
     }
 }
