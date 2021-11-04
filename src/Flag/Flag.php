@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags\Flag;
+namespace Inpsyde\MultilingualPress\SiteFlags\Flag;
 
 /**
  * Interface Flag

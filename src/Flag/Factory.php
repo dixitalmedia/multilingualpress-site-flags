@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags\Flag;
+namespace Inpsyde\MultilingualPress\SiteFlags\Flag;
 
 use Inpsyde\MultilingualPress\Framework\Language\Language;
-use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteSettingsRepository;
+use Inpsyde\MultilingualPress\SiteFlags\Core\Admin\SiteSettingsRepository;
 
 use function Inpsyde\MultilingualPress\siteLanguageTag;
 use function Inpsyde\MultilingualPress\languageByTag;

@@ -1,7 +1,7 @@
 <?php
 
 use Inpsyde\MultilingualPress\Framework\Service\ServiceProvider as ServiceProviderInterface;
-use Inpsyde\MultilingualPress\Flags\ServiceProvider;
+use Inpsyde\MultilingualPress\SiteFlags\ServiceProvider;
 
 return function (): ServiceProviderInterface
 {

@@ -12,14 +12,14 @@
 
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags\Flag;
+namespace Inpsyde\MultilingualPress\SiteFlags\Flag;
 
 use Inpsyde\MultilingualPress\Framework\Language\Language;
 
 /**
  * Class Raster
  *
- * @package Inpsyde\MultilingualPress\Flags\Flag
+ * @package Inpsyde\MultilingualPress\SiteFlags\Flag
  */
 final class Raster implements Flag
 {

@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags;
+namespace Inpsyde\MultilingualPress\SiteFlags;
 
 use Inpsyde\MultilingualPress\Asset\AssetFactory;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettings as ParentSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings as ParentNewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater as ParentSiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler as ParentSiteSiteSettingsUpdateRequestHandler;
-use Inpsyde\MultilingualPress\Flags\Flag\Factory;
+use Inpsyde\MultilingualPress\SiteFlags\Flag\Factory;
 use Inpsyde\MultilingualPress\Core\Locations;
-use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteSettingsRepository;
-use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteSettingsUpdater;
+use Inpsyde\MultilingualPress\SiteFlags\Core\Admin\SiteSettingsRepository;
+use Inpsyde\MultilingualPress\SiteFlags\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Framework\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Framework\Factory\NonceFactory;
 use Inpsyde\MultilingualPress\Framework\Http\ServerRequest;
@@ -34,8 +34,8 @@ use Inpsyde\MultilingualPress\Framework\Service\Exception\NameOverwriteNotAllowe
 use Inpsyde\MultilingualPress\Framework\Service\Exception\WriteAccessOnLockedContainer;
 use Inpsyde\MultilingualPress\Framework\Setting\Site\SiteSettingMultiView;
 use Inpsyde\MultilingualPress\Framework\Setting\Site\SiteSettingsSectionView;
-use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteFlagUrlSetting;
-use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteMenuLanguageStyleSetting;
+use Inpsyde\MultilingualPress\SiteFlags\Core\Admin\SiteFlagUrlSetting;
+use Inpsyde\MultilingualPress\SiteFlags\Core\Admin\SiteMenuLanguageStyleSetting;
 use Inpsyde\MultilingualPress\TranslationUi\Post\TableList;
 
 class ServiceProvider implements ModuleServiceProvider

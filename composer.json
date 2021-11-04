@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Inpsyde\\MultilingualPress\\Flags\\": "src/"
+            "Inpsyde\\MultilingualPress\\SiteFlags\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Inpsyde\\MultilingualPress\\Flags\\Tests\\Unit\\": "tests/php/unit"
+            "Inpsyde\\MultilingualPress\\SiteFlags\\Tests\\Unit\\": "tests/php/unit"
         }
     },
     "extra": {

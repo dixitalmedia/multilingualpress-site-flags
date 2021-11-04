@@ -9,11 +9,11 @@
  */
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags;
+namespace Inpsyde\MultilingualPress\SiteFlags;
 
-use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteMenuLanguageStyleSetting;
-use Inpsyde\MultilingualPress\Flags\Core\Admin\SiteSettingsRepository;
-use Inpsyde\MultilingualPress\Flags\Flag\Factory;
+use Inpsyde\MultilingualPress\SiteFlags\Core\Admin\SiteMenuLanguageStyleSetting;
+use Inpsyde\MultilingualPress\SiteFlags\Core\Admin\SiteSettingsRepository;
+use Inpsyde\MultilingualPress\SiteFlags\Flag\Factory;
 use Inpsyde\MultilingualPress\NavMenu\ItemRepository;
 
 /**
