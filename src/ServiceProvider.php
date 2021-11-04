@@ -40,7 +40,7 @@ use Inpsyde\MultilingualPress\TranslationUi\Post\TableList;
 
 class ServiceProvider implements ModuleServiceProvider
 {
-    protected const MODULE_ID = 'multilingualpress-site-flags';
+    public const MODULE_ID = 'multilingualpress-site-flags';
     protected const OLD_FLAGS_ADDON_PATH = 'multilingualpress-site-flags/multilingualpress-site-flags.php';
 
     /**
@@ -87,6 +87,9 @@ class ServiceProvider implements ModuleServiceProvider
     {
         // phpcs:enable
 
+        $flagsPath = rtrim(plugins_url('/', dirname(__FILE__))) . 'resources/images/flags';
+        $container->shareValue('multilingualpress.siteFlags.flagsPath', $flagsPath);
+
         $container->share(
             'siteFlagsProperties',
             static function (): array {
@@ -118,7 +121,8 @@ class ServiceProvider implements ModuleServiceProvider
             static function (Container $container): FlagFilter {
                 return new FlagFilter(
                     $container[SiteSettingsRepository::class],
-                    $container[Factory::class]
+                    $container[Factory::class],
+                    $container->get('multilingualpress.siteFlags.flagsPath')
                 );
             }
         );
@@ -294,6 +298,7 @@ class ServiceProvider implements ModuleServiceProvider
 
         $flagFilter = $container[FlagFilter::class];
         add_filter('nav_menu_item_title', [$flagFilter, 'navMenuItems'], 10, 2);
+        add_filter('multilingualpress.language_switcher_item_flag_url', [$flagFilter, 'languageSwitcherItems'], 10, 2);
     }
 
     /**

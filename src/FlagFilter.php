@@ -32,14 +32,20 @@ class FlagFilter
     private $flagFactory;
 
     /**
+     * @var string
+     */
+    private $flagsPath;
+
+    /**
      * NavMenuLanguageStyleFilter constructor
      * @param SiteSettingsRepository $settingsRepository
      * @param Factory $flagFactory
      */
-    public function __construct(SiteSettingsRepository $settingsRepository, Factory $flagFactory)
+    public function __construct(SiteSettingsRepository $settingsRepository, Factory $flagFactory, string $flagsPath)
     {
         $this->settingsRepository = $settingsRepository;
         $this->flagFactory = $flagFactory;
+        $this->flagsPath = $flagsPath;
     }
 
     /**
@@ -71,6 +77,18 @@ class FlagFilter
         }
 
         return $title;
+    }
+
+    /**
+     * Show the flags on language switcher items
+     *
+     * @param string $flag
+     * @param string $isoCode
+     * @return string
+     */
+    public function languageSwitcherItems(string $flag, string $isoCode): string
+    {
+        return "{$this->flagsPath}/{$isoCode}.gif";
     }
 
     /**
