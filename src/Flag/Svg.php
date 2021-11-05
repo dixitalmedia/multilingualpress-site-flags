@@ -1,4 +1,6 @@
-<?php # -*- coding: utf-8 -*-
+<?php
+
+# -*- coding: utf-8 -*-
 /*
  * This file is part of the MultilingualPress package.
  *
@@ -10,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags\Flag;
+namespace Inpsyde\MultilingualPress\SiteFlags\Flag;
 
 /**
  * Class Svg

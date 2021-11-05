@@ -1,5 +1,6 @@
-<?php # -*- coding: utf-8 -*-
+<?php
 
+# -*- coding: utf-8 -*-
 /*
  * This file is part of the Inpsyde Unprefix Theme package.
  *
@@ -11,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags\Core\Admin;
+namespace Inpsyde\MultilingualPress\SiteFlags\Core\Admin;
 
 use Inpsyde\MultilingualPress\Framework\Http\Request;
 use Inpsyde\MultilingualPress\Framework\Setting\SiteSettingsUpdatable;

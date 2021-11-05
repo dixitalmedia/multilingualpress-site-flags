@@ -1,4 +1,6 @@
-<?php # -*- coding: utf-8 -*-
+<?php
+
+# -*- coding: utf-8 -*-
 /*
  * This file is part of the MultilingualPress package.
  *
@@ -10,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Inpsyde\MultilingualPress\Flags\Core\Admin;
+namespace Inpsyde\MultilingualPress\SiteFlags\Core\Admin;
 
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepositoryTrait;
 
